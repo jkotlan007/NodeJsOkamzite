@@ -5,6 +5,7 @@ let logger = require('morgan');
 let cookieParser = require('cookie-parser');
 let bodyParser = require('body-parser');
 let fs = require('fs');
+let User = require('./models/User.js');
 
 let routes = require('./routes/index');
 let users = require('./routes/users');
@@ -35,6 +36,15 @@ app.get('/form', function(req, res) {
       res.writeHead(200, { 'Content-Type': 'text/html'});
       res.end(content, 'utf-8');
     }
+  });
+});
+
+app.post('/signup', function(req, res){
+  let username = req.body.username;
+  let password = req.body.password;
+  User.addUser(username, password, function(err, user){
+    if (err) throw err;
+    res.redirect('/form');
   });
 });
 
